@@ -1,0 +1,552 @@
+{
+	"info": {
+		"_postman_id": "2d3cd2fd-00b6-4d43-9502-6e332e200496",
+		"name": "MyCollection1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26066265"
+	},
+	"item": [
+		{
+			"name": "Creat Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var Store = JSON.parse(responseBody);\r",
+							"postman.setEnvironmentVariable(\"token\", Store.token);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/auth",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Storing Key & value in environment\r",
+							"\r",
+							"// var Store = JSON.parses(responseBody);\r",
+							"// postman.setEnvironmentVariable(\"bookingid\", Store.bookingid);\r",
+							"\r",
+							"// another way of storing Key & value\r",
+							"\r",
+							"var Store = pm.response.json()\r",
+							"pm.environment.set(\"bookingid\", Store.bookingid)\r",
+							"\r",
+							"\r",
+							"// Testing status code \r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"// BookingId Testing\r",
+							"pm.test(\"BookingId Validation\", function(){\r",
+							"    pm.expect(Store.bookingid).to.eql(pm.environment.get(\"bookingid\"))\r",
+							"})\r",
+							"console.log(\"BookingID Is: \"+Store.bookingid)\r",
+							"\r",
+							"// firstname Testing\r",
+							"pm.test(\"FirstName Validation\", function(){\r",
+							"    pm.expect(Store.booking.firstname).to.eql(pm.environment.get(\"Firstname\"))\r",
+							"})\r",
+							"console.log(\"FirstName: \"+Store.booking.firstname)\r",
+							"\r",
+							"// lastname testing\r",
+							"pm.test(\"LastName Validation\", function(){\r",
+							"    pm.expect(Store.booking.lastname).to.eql(pm.environment.get(\"Lastname\"))\r",
+							"})\r",
+							"console.log(\"LastName: \"+Store.booking.lastname)\r",
+							"\r",
+							"// Total Price Testing\r",
+							"pm.test(\"TotalPrice Validation\", function(){\r",
+							"    pm.expect(Store.booking.totalprice).to.eql(pm.environment.get((\"price\"))) \r",
+							"})\r",
+							"console.log(\"Total: \"+Store.booking.totalprice)\r",
+							"\r",
+							"// Payment Testing\r",
+							"pm.test(\"Payment paid Validation\", function(){\r",
+							"    pm.expect(Store.booking.depositpaid).to.eql(pm.environment.get(\"deposite\"))\r",
+							"})\r",
+							"console.log(\"Payment: \"+Store.booking.depositpaid)\r",
+							"\r",
+							"// Checkin date Testing\r",
+							"pm.test(\"Checkin Validation\", function(){\r",
+							"    pm.expect(Store.booking.bookingdates.checkin).to.eql(pm.environment.get(\"CheckIn\"))\r",
+							"})\r",
+							"console.log(\"Check in date: \"+Store.booking.bookingdates.checkin)\r",
+							"\r",
+							"// Checkout Testing\r",
+							"pm.test(\"Checkout Validation\", function(){\r",
+							"    pm.expect(Store.booking.bookingdates.checkout).to.eql(pm.environment.get(\"CheckOut\"))\r",
+							"})\r",
+							"console.log(\"Check out date: \"+Store.booking.bookingdates.checkout)\r",
+							"\r",
+							"// Additional needs Testing\r",
+							"pm.test(\"Appetizer to take\", function(){\r",
+							"    pm.expect(Store.booking.additionalneeds).to.eql(\"Breakfast\")\r",
+							"})\r",
+							"console.log(\"Appetizers: \"+Store.booking.additionalneeds)\r",
+							"\r",
+							"\r",
+							"// Testing data fron CSV file. \r",
+							"\r",
+							"// pm.test(\"csv data First name\", function(){\r",
+							"//     pm.expect(Store.booking.firstname).to.eql(pm.iterationData.get(\"Firstname\"))\r",
+							"// })\r",
+							"// console.log(Store.booking.firstname)\r",
+							"// console.log(Store.booking.lastname)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generating random Name & value \r",
+							"\r",
+							"var firstname = pm.variables.replaceIn(\"{{$randomFirstName}}\")\r",
+							"console.log(\"Firstname: \"+firstname)\r",
+							"\r",
+							"var lastname = pm.variables.replaceIn(\"{{$randomLastName}}\")\r",
+							"console.log(\"Lastname: \"+lastname)\r",
+							"\r",
+							"var price = pm.variables.replaceIn(\"{{$randomInt}}\")\r",
+							"console.log(\"TotalPrice: \"+price)\r",
+							"\r",
+							"// Creating this variable cause postman can not catch the interger value directly\r",
+							"var par = parseInt(price)\r",
+							"\r",
+							"var deposite = pm.variables.replaceIn(\"{{$randomBoolean}}\")\r",
+							"console.log(\"Payment: \"+deposite)\r",
+							"\r",
+							"// Storing the random name & values in environment\r",
+							"pm.environment.set(\"Firstname\", firstname)\r",
+							"pm.environment.set(\"Lastname\", lastname)\r",
+							"pm.environment.set(\"price\", (par))\r",
+							"pm.environment.set(\"deposite\", Boolean(deposite))\r",
+							"\r",
+							"\r",
+							"// Date Generator \r",
+							"const moment = require('moment')\r",
+							"const today = moment()\r",
+							"\r",
+							"// console.log(today)\r",
+							"\r",
+							"console.log(today.format(\"YYYY-MM-DD\"))\r",
+							"console.log(today.add(4, \"day\").add(1, \"M\").format(\"YYYY-MM-DD\"))\r",
+							"\r",
+							"// Storing the Dates in environment\r",
+							"pm.environment.set(\"CheckIn\", today.format(\"YYYY-MM-DD\"))\r",
+							"pm.environment.set(\"CheckOut\", today.add(4, \"day\").add(1, \"M\").format(\"YYYY-MM-DD\"))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\": \"{{Firstname}}\",\r\n    \"lastname\": \"{{Lastname}}\",\r\n    \"totalprice\": {{price}},\r\n    \"depositpaid\": {{deposite}},\r\n    \"bookingdates\": {\r\n        \"checkin\": \"{{CheckIn}}\",\r\n        \"checkout\": \"{{CheckOut}}\"\r\n    },\r\n    \"additionalneeds\": \"Breakfast\"\r\n}"
+				},
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var Store = pm.response.json()\r",
+							"pm.environment.set(\"Id\", Store[10].bookingid)\r",
+							"\r",
+							"// Testing ID in array\r",
+							"pm.test(\"ID Validation\", function(){\r",
+							"    pm.expect(Store[10].bookingid).to.eql(pm.environment.get(\"Id\"))\r",
+							"})\r",
+							"\r",
+							"console.log(\"The ID Is: \"+Store[10].bookingid)\r",
+							"console.log(\"The Length Is: \"+Store.length)\r",
+							"\r",
+							"// Searching the Id from the array and finding its INDEX.\r",
+							"for(i=0; i<Store.length; i++){\r",
+							"    if(Store[i].bookingid==pm.environment.get(\"Id\")){\r",
+							"        console.log(\"Index: \"+i+\" \"+\"The ID Is: \"+Store[i].bookingid)\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"\r",
+							"// Error handling of status code\r",
+							"var code = pm.response.code\r",
+							"console.log(\"Response Code Is: \"+code)\r",
+							"\r",
+							"switch(code){\r",
+							"    case 200:\r",
+							"        pm.test(\"Successfully done\")\r",
+							"        break;\r",
+							"\r",
+							"    case 404:\r",
+							"        pm.test(\"Not Found\")\r",
+							"        break;\r",
+							"    case 403:\r",
+							"        pm.test(\"Forbiden\")\r",
+							"        break;\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var Store = pm.response.json()\r",
+							"\r",
+							"// testing the updated field (additionalNeeds)\r",
+							"pm.test(\"Appetizer to take\", function(){\r",
+							"    pm.expect(Store.additionalneeds).to.eql(pm.environment.get(\"Additional\"))\r",
+							"})\r",
+							"console.log(\"Updated Appetizer to Take: \"+Store.additionalneeds)\r",
+							"\r",
+							"// First Name testing\r",
+							"pm.test(\"FirstName Validation\", function(){\r",
+							"    pm.expect(Store.firstname).to.eql(pm.environment.get(\"Firstname\"))\r",
+							"})\r",
+							"console.log(\"Firstname: \"+Store.firstname)\r",
+							"\r",
+							"// Lastname Testing\r",
+							"pm.test(\"LastName Validation\", function(){\r",
+							"    pm.expect(Store.lastname).to.eql(pm.environment.get(\"Lastname\"))\r",
+							"})\r",
+							"console.log(\"Lastname: \"+Store.lastname)\r",
+							"\r",
+							"// Total price Testing\r",
+							"pm.test(\"TotalPrice Validation\", function(){\r",
+							"    pm.expect(Store.totalprice).to.eql(pm.environment.get((\"price\"))) \r",
+							"})\r",
+							"console.log(\"Price: \"+Store.totalprice)\r",
+							"\r",
+							"// Deposite Testing\r",
+							"pm.test(\"Payment paid Validation\", function(){\r",
+							"    pm.expect(Store.depositpaid).to.eql(pm.environment.get(\"deposite\"))\r",
+							"})\r",
+							"console.log(\"Deposite: \"+Store.depositpaid)\r",
+							"\r",
+							"// CheckIn Testing\r",
+							"pm.test(\"Checkin Validation\", function(){\r",
+							"    pm.expect(Store.bookingdates.checkin).to.eql(pm.environment.get(\"CheckIn\"))\r",
+							"})\r",
+							"console.log(\"Checkin date: \"+Store.bookingdates.checkin)\r",
+							"\r",
+							"// CheckOut Testing\r",
+							"pm.test(\"Checkout Validation\", function(){\r",
+							"    pm.expect(Store.bookingdates.checkout).to.eql(pm.environment.get(\"CheckOut\"))\r",
+							"})\r",
+							"console.log(\"CheckOut date: \"+Store.bookingdates.checkout)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token= {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\": \"{{Firstname}}\",\r\n    \"lastname\": \"{{Lastname}}\",\r\n    \"totalprice\": {{price}},\r\n    \"depositpaid\": {{deposite}},\r\n    \"bookingdates\": {\r\n        \"checkin\": \"{{CheckIn}}\",\r\n        \"checkout\": \"{{CheckOut}}\"\r\n    },\r\n    \"additionalneeds\": \"{{Additional}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/{{bookingid}}",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						"{{bookingid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PartialUpdateBooking",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generating randon name for partial upadate\r",
+							"\r",
+							"var UpFN = pm.variables.replaceIn(\"{{$randomFirstName}}\")\r",
+							"console.log(\"Updated First Name: \"+UpFN)\r",
+							"\r",
+							"var UpLN = pm.variables.replaceIn(\"{{$randomLastName}}\")\r",
+							"console.log(\"Updated Last Name: \"+UpLN)\r",
+							"\r",
+							"pm.environment.set(\"Updated FN\", UpFN)\r",
+							"pm.environment.set(\"Updated LN\", UpLN)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var Store = pm.response.json()\r",
+							"\r",
+							"// Fristname Testing\r",
+							"pm.test(\"Changed First Name Validation\", function(){\r",
+							"    pm.expect(Store.firstname).to.eql(pm.environment.get(\"Updated FN\"))\r",
+							"})\r",
+							"console.log(\"FristName after change: \"+Store.firstname)\r",
+							"\r",
+							"// Lastname Testing\r",
+							"pm.test(\"Changed Last Name Validation\", function(){\r",
+							"    pm.expect(Store.lastname).to.eql(pm.environment.get(\"Updated LN\"))\r",
+							"})\r",
+							"console.log(\"Lastname after change: \"+Store.lastname)\r",
+							"\r",
+							"// Total Price Testing\r",
+							"pm.test(\"TotalPrice Validation\", function(){\r",
+							"    pm.expect(Store.totalprice).to.eql(pm.environment.get((\"price\"))) \r",
+							"})\r",
+							"console.log(\"Price: \"+Store.totalprice)\r",
+							"\r",
+							"// Payment Testing\r",
+							"pm.test(\"Payment paid Validation\", function(){\r",
+							"    pm.expect(Store.depositpaid).to.eql(pm.environment.get(\"deposite\"))\r",
+							"})\r",
+							"console.log(\"Deposite: \"+Store.depositpaid)\r",
+							"\r",
+							"// CheckIn Date Testing\r",
+							"pm.test(\"Checkin Validation\", function(){\r",
+							"    pm.expect(Store.bookingdates.checkin).to.eql(pm.environment.get(\"CheckIn\"))\r",
+							"})\r",
+							"console.log(\"Checkin date: \"+Store.bookingdates.checkin)\r",
+							"\r",
+							"// Checkout date Testing\r",
+							"pm.test(\"Checkout Validation\", function(){\r",
+							"    pm.expect(Store.bookingdates.checkout).to.eql(pm.environment.get(\"CheckOut\"))\r",
+							"})\r",
+							"console.log(\"Checkout date: \"+Store.bookingdates.checkout)\r",
+							"\r",
+							"// Additional Needs Testing\r",
+							"pm.test(\"Appetizers: \", function(){\r",
+							"    pm.expect(Store.additionalneeds).to.eql(pm.environment.get(\"Additional\"))\r",
+							"})\r",
+							"console.log(\"Appetizer: \"+Store.additionalneeds)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token= {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\": \"{{Updated FN}}\",\r\n    \"lastname\": \"{{Updated LN}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/{{bookingid}}",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						"{{bookingid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// Error handling of status code\r",
+							"var code = pm.response.code\r",
+							"console.log(\"response code is: \"+code)\r",
+							"\r",
+							"switch(code){\r",
+							"    case 200:\r",
+							"        pm.test(\"Successfull..!\")\r",
+							"        break;\r",
+							"    case 201:\r",
+							"        pm.test(\"Booking Deleted\")\r",
+							"        break;\r",
+							"    case 403:\r",
+							"        pm.test(\"Forbiden\")\r",
+							"        break;\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token= {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/{{bookingid}}",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						"{{bookingid}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

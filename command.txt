@@ -1,0 +1,5 @@
+for normal report: 
+command: newman run MyCollection1.postman_collection.json -e QA.postman_environment.json -r cli,html
+
+for decorated report:
+command: newman run MyCollection1.postman_collection.json -e QA.postman_environment.json -r cli,htmlextra
